@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <form method="GET" action="/search" class="card card-sm">
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-search h4 text-body"></i>
+                    </div>
+
+                    <div class="col">
+                        <input id="keyword" name="keyword" value="{{ keyword }}" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search #">
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="submit" name="search" value="search" class="btn btn-lg btn-success">
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row justify-content-center">
+        <div class="col-8">
+        {% with success = get_flashed_messages(category_filter=["success"]) %}
+          {% if success %}
+            {%- for message in success %}
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick=delete_flash(this)>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor -%}
+          {% endif %}
+        {% endwith %}
+
+        {% with errors = get_flashed_messages(category_filter=["danger"]) %}
+            {% if errors %}
+                {%- for message in errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span>{{ message }}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick=delete_flash(this)>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor -%}
+            {% endif %}
+        {% endwith %}
+
+        {% with errors = get_flashed_messages(category_filter=["warning"]) %}
+            {% if errors %}
+                {%- for message in errors %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert" onclick=delete_flash(this)>
+                        <span>{{ message }}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor -%}
+            {% endif %}
+        {% endwith %}
+    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {% if current_user.is_authenticated %}
+                {% if tweetsy %}
+                    <form method ="POST" action="{{ url_for('store') }}">
+                        <div class="col-auto">
+                            <input type="hidden" name="keyword" value="{{ keyword }}">
+                            <input type="hidden" name="tweetsy" value="{{ tweetsy }}">
+                            <div style="float: left;"><input type="submit" name="store" value="store + " class="btn btn-lg btn-success" ></div>
+                        </div>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+
+
+    <br><br>
+
+    {% if tweets %}
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Results</th>
+              </tr>
+            </thead>
+
+            <tbody>
+            {% for item in tweets %}
+              <tr>
+                <td>{{ item['text'] }}</td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+    {% endif %}
+</div>
+
+
+{% endblock %}

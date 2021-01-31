@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <form method="POST" action="/login" >
+                        <div class="mb-3">
+                            <label id="exampleInputEmail1" class="form-label align-label">Email</label>
+                            <input type="email" name="email" value="{{ request.form['email'] }}" class="form-control" id="email" aria-describedby="emailHelp"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label id="exampleInputPassword1" class="form-label align-label"> Password</label>
+                            <input type="password" name="password" class="form-control" id="passw"/>
+                            <div id="passwordHelp" class="form-text">
+                                <a href="#">Password forget</a>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="submit" class="btn btn-success" value="Sign In">Sign In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row new-registry justify-content-center">
+        <div class="col-md-4">
+            {% with success = get_flashed_messages(category_filter=["success"]) %}
+              {% if success %}
+                {%- for message in success %}
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick=delete_flash(this)>
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                {% endfor -%}
+              {% endif %}
+            {% endwith %}
+
+            {% with errors = get_flashed_messages(category_filter=["danger"]) %}
+                {% if errors %}
+                    {%- for message in errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <span>{{ message }}</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick=delete_flash(this)>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor -%}
+                {% endif %}
+            {% endwith %}
+
+            {% with errors = get_flashed_messages(category_filter=["warning"]) %}
+                {% if errors %}
+                    {%- for message in errors %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <span>{{ message }}</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick=delete_flash(this)>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor -%}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row new-registry justify-content-center">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p>No account yet? <a href="{{url_for('register') }}">Register .. </a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

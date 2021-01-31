@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+        {% with success = get_flashed_messages(category_filter=["success"]) %}
+          {% if success %}
+            {%- for message in success %}
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick=delete_flash(this)>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor -%}
+          {% endif %}
+        {% endwith %}
+
+        {% with errors = get_flashed_messages(category_filter=["danger"]) %}
+            {% if errors %}
+                {%- for message in errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span>{{ message }}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick=delete_flash(this)>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor -%}
+            {% endif %}
+        {% endwith %}
+
+        {% with errors = get_flashed_messages(category_filter=["warning"]) %}
+            {% if errors %}
+                {%- for message in errors %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <span>{{ message }}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick=delete_flash(this)>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor -%}
+            {% endif %}
+        {% endwith %}
+
+      <table class="table table-bordered">
+
+        <thead>
+          <tr>
+            <th scope="col">Keyword</th>
+            <th scope="col">Tweet</th>
+            <th scope="col">Created at</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+        {% for fav_tweet in stored_tweets %}
+
+        <form method="POST" action="/delete_tweet">
+          <input type="hidden" name="tweet_id" value="{{ fav_tweet.text }}">
+          <tr>
+            <th scope="row">{{ fav_tweet.keyword }}</th>
+            <td>{{ fav_tweet.text }}</td>
+            <td>{{ fav_tweet.creation_time }}</td>
+            <td>
+              <input type="submit" name="delete" value="Delete" class="btn btn-danger"/>
+            </td>
+          </tr>
+        </form>
+
+        {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
